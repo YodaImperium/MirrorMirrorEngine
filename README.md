@@ -12,25 +12,50 @@ Testcases should be put in `/src/test` and should be structured accordingly to `
 
 ## To Run
 
-`python src/app/app.py`
+`python src/app.py`
 
 ## dto
 For any get request, dto should be use exclusively.
 
+## Docker Notes
+
+Build and Dev
+To build image, run `docker build -t mirror_mirror_engine .`
+To view past images, run `docker images`
+Running the image `docker run -p 5000:5000 mirror_mirror_engine`
+
 ## Deploy on Azure (untested)
+
+Device set up:
+- Install Azure CLI via `https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest`
+
+Constants: (replace all instants below when altered)
+- Resource Group: `MirrorMirrorEngineResourceGroup`
+- App service plan: `mirrorMirrorEngineServicePlan`
+- API name: `mirrorMirrorEnginePython`
+- 
 
 Steps 1-5 can and should idealy be completed on the Azure website.
 1. login `az login`
-2. create resources group `az group create --name mirroMirrorEngineResourceGroup --location eastus`
-3. create app service plan `az appservice plan create --name mirroMirrorEngineServicePlan --resource-group mirroMirrorEngineResourceGroup --sku B1 --is-linux`
-4. create webapp `az webapp create --resource-group mirroMirrorEngineResourceGroup --plan mirroMirrorEngineServicePlan --name mirroMirrorEnginePython --runtime "PYTHON|3.8"`
-5. set up deployment `az webapp deployment source config-local-git --name mirroMirrorEnginePython --resource-group mirroMirrorEngineResourceGroup`
+2. create resources group `az group create --name MirrorMirrorEngineResourceGroup --location uksouth`
+3. create app service plan `az appservice plan create --name mirrorMirrorEngineServicePlan --resource-group DefaultResourceGroup-SUK --sku B1 --is-linux`
+4. create webapp `az webapp create --resource-group MirrorMirrorEngineResourceGroup --plan mirrorMirrorEngineServicePlan --name mirrorMirrorEnginePython --runtime "PYTHON|3.8"`
 
-Step 2-6 should ran on your device at root.
-6. navigate to project root, add remote group repository `az webapp deployment source config-local-git --name mirroMirrorEnginePython --resource-group mirroMirrorEngineResourceGroup`
-7. deploy `git remote add azure <Your-Git-Remote-URL>`
+A.Deploy from Github
+1. navigate to project root, add remote group repository `az webapp deployment source config-local-git --name mirrorMirrorEnginePython --resource-group MirrorMirrorEngineResourceGroup`
+2. deploy `git remote add azure <Your-Git-Remote-URL>`
 
-Endpoint will be available at `http://<your-app-name>.azurewebsites.net`
+B.Deploy from Docker
+
+1. `az container create --resource-group MirrorMirrorEngineResourceGroup --name mirrorMirrorContainer --image myusername/mirror_mirror_engine:latest --cpu 1 --memory 1.5 --ip-address public --port 5000`
+currently allocated 1 cpu core
+currently allocated 1.5 GB of memory
+
+To check container status `az container show --resource-group MirrorMirrorEngineResourceGroup --name mirrorMirrorContainer --query ipAddress.ip --output table`
+
+To access it, `az container show --resource-group myResourceGroup --name myContainer --query ipAddress.ip --output table`
+
+Endpoint will be available at `http://<your-app-name>.azurewebsites.net` (app name dependant on)
 
 ## Api end points
 
