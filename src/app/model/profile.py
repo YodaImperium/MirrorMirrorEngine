@@ -10,9 +10,10 @@ class Profile(db.Model):
     location = db.Column(db.String(100), nullable=True) # Name of the place eg London
     lattitude = db.Column(db.String(100), nullable=True)
     longitude = db.Column(db.String(100), nullable=True)
-    class_size = db.Column(db.Integer, nullable=True)
+    size = db.Column(db.Integer, nullable=True)
     availability = db.Column(db.JSON, nullable=True)  # Store as JSON array
     interests = db.Column(db.JSON, nullable=True)  # Store as JSON array
+    metadata = db.Column(db.JSON, nullable=True)  # Additional data for generize whatever Store as JSON array
     
     # Relationships
     sent_relations = db.relationship('Relation', foreign_keys='Relation.from_profile_id', 
